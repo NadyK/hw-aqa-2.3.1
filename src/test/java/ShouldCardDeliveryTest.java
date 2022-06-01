@@ -23,8 +23,8 @@ public class ShouldCardDeliveryTest {
     @Test
     public void shouldCardDelivery () throws InterruptedException {
         final RegistrationByCardInfo registrationByCardInfo=DataGenerator.Registration.generateByCard("ru");
-        String planningDate = generateDate(3);
-        String planningDate2 = generateDate(5);
+        String planningDate = generateDate(4);
+        String planningDate2 = generateDate(10);
         holdBrowserOpen = true;
         open("http://localhost:9999/");
         $( "[data-test-id= city] input").setValue(registrationByCardInfo.getCity());
@@ -36,17 +36,17 @@ public class ShouldCardDeliveryTest {
         $("[data-test-id=agreement]").click();
         $(byClassName("button")).click();
         $(byText("Успешно!")).shouldBe(Condition.appear, Duration.ofSeconds(15));
-        $(".notification__content")
-                .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate), Duration.ofSeconds(15));
-     //$(byClassName(".icon-button icon-button_size_m icon-button_theme_alfa-on-white notification__closer")).click();
-       // $(byText("Успешно!")).shouldBe(Condition.disappear, Duration.ofSeconds(15));
+
+        //$(byClassName("icon-button icon-button_size_m icon-button_theme_alfa-on-white notification__closer ")).click();
+
+        timeout=6000;
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id='date'] input").setValue(planningDate2);
         $(byClassName("button")).click();
-       // $(byText("Перепланировать?")).shouldBe(Condition.appear, Duration.ofSeconds(15));
+        $(byText("Перепланировать")).shouldBe(Condition.appear, Duration.ofSeconds(15)).click();
 
        $(byText("Успешно!")).shouldBe(Condition.appear, Duration.ofSeconds(15));
        $(".notification__content")
-               .shouldHave(Condition.text("Встреча успешно забронирована на " + planningDate2), Duration.ofSeconds(15));
+               .shouldHave(Condition.text("Встреча успешно запланирована на " + planningDate2), Duration.ofSeconds(15));
     }
 }
