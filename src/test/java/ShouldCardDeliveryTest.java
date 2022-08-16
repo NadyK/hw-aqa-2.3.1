@@ -1,5 +1,10 @@
 import com.codeborne.selenide.Condition;
 import com.codeborne.selenide.Configuration;
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
 
@@ -12,9 +17,15 @@ import static com.codeborne.selenide.Configuration.*;
 import static com.codeborne.selenide.Selectors.*;
 import static com.codeborne.selenide.Selenide.*;
 
-
-
 public class ShouldCardDeliveryTest {
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
+    }
 
     @Test
     public void shouldCardDelivery () throws InterruptedException {
@@ -23,7 +34,7 @@ public class ShouldCardDeliveryTest {
         String planningDate2 = DataGenerator.generateDate(10);
         holdBrowserOpen = true;
         open("http://localhost:9999/");
-        $( "[data-test-id= city] input").setValue(registrationByCardInfo.getCity());
+        $("[data-test-id= city] input").setValue(registrationByCardInfo.getCity());
         $("[data-test-id='date'] input").sendKeys(Keys.chord(Keys.SHIFT, Keys.HOME), Keys.BACK_SPACE);
         $("[data-test-id='date'] input").setValue(planningDate);
         $(byName("name")).setValue(registrationByCardInfo.getName());
